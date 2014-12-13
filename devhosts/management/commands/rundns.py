@@ -10,7 +10,9 @@ from devhosts.models import Server
 
 
 class Command(BaseCommand):
-    help = ''
+    help = 'Run an DNS server that map your defined servers domains to their '
+           'IPs and proxy not matching queries to an upstream DNS server.'
+
     option_list = (
         make_option('-a', '--address',
             default='0.0.0.0',
@@ -24,16 +26,19 @@ class Command(BaseCommand):
     ) + BaseCommand.option_list
 
     def handle(self, *args, **options):
+        # map django command verbosity to logging options
+        logger = DNSLogger(log={
+            '0': '-request,-reply,-truncated,-error',
+            '1': '',
+            '2': '+data',
+            '3': '+recv,+send,+data'
+        }[options['verbosity']])
+
         udp_server = DNSServer(
             resolver=InterceptingResolver(),
             address=options['address'],
             port=options['port'],
-            logger=DNSLogger(log={
-                '0': '-request,-reply,-truncated,-error',
-                '1': '',
-                '2': '+recv,+send',
-                '3': '+recv,+send,+data'
-            }[options['verbosity']])
+            logger=logger
         )
         udp_server.start_thread()
 
