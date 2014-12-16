@@ -1,14 +1,36 @@
 from django.db import models
 
+from devhosts.managers import ServerManager
 
-class ServerManager(models.Manager):
 
-    def get_for_dns_or_none(self, domain):
-        return self.get_queryset().filter(domain=domain).first()
+class RootCertificate(models.Model):
+    name = models.CharField(max_length=255)
+
+    private_key = models.TextField(
+        blank=True,
+        help_text='Keep empty to auto generate'
+    )
+
+    certificate = models.TextField(
+        blank=True,
+        help_text='Keep empty to auto generate'
+    )
 
 
 class Server(models.Model):
-    domain = models.CharField(max_length=255)
+    domain = models.CharField(max_length=255, db_index=True)
     ip = models.GenericIPAddressField()
+
+    root_certificate = models.ForeignKey(RootCertificate)
+
+    private_key = models.TextField(
+        blank=True,
+        help_text='Keep empty to auto generate'
+    )
+
+    certificate = models.TextField(
+        blank=True,
+        help_text='Keep empty to auto generate'
+    )
 
     objects = ServerManager()

@@ -11,13 +11,29 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='RootCertificate',
+            fields=[
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('private_key', models.TextField(blank=True, help_text='Keep empty to auto generate')),
+                ('certificate', models.TextField(blank=True, help_text='Keep empty to auto generate')),
+                ('name', models.CharField(max_length=255)),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='Server',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
-                ('domain', models.CharField(max_length=255)),
+                ('id', models.AutoField(auto_created=True, verbose_name='ID', serialize=False, primary_key=True)),
+                ('private_key', models.TextField(blank=True, help_text='Keep empty to auto generate')),
+                ('certificate', models.TextField(blank=True, help_text='Keep empty to auto generate')),
+                ('domain', models.CharField(max_length=255, db_index=True)),
                 ('ip', models.GenericIPAddressField()),
             ],
             options={
+                'abstract': False,
             },
             bases=(models.Model,),
         ),

@@ -10,19 +10,21 @@ from devhosts.models import Server
 
 
 class Command(BaseCommand):
-    help = 'Run an DNS server that map your defined servers domains to their '
-           'IPs and proxy not matching queries to an upstream DNS server.'
+    help = (
+        'Run an DNS server that map your defined servers domains to their '
+        'IPs and proxy not matching queries to an upstream DNS server.'
+    )
 
     option_list = (
         make_option('-a', '--address',
-            default='0.0.0.0',
-            help='Address to bind to.',
-        ),
+                    default='0.0.0.0',
+                    help='Address to bind to.',
+                    ),
         make_option('-p', '--port',
-            default=53,
-            type='int',
-            help='Port to bind to.',
-        )
+                    default=53,
+                    type='int',
+                    help='Port to bind to.',
+                    )
     ) + BaseCommand.option_list
 
     def handle(self, *args, **options):
@@ -47,4 +49,3 @@ class Command(BaseCommand):
                 time.sleep(1)
         except KeyboardInterrupt:
             udp_server.stop()
-

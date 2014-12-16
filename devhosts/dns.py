@@ -1,4 +1,4 @@
-from dnslib import DNSRecord,RR,QTYPE,RCODE,parse_time
+from dnslib import DNSRecord, RR, QTYPE
 from dnslib.server import BaseResolver
 
 from devhosts.models import Server
@@ -10,6 +10,7 @@ class InterceptingResolver(BaseResolver):
     If it matches the server's ip is replied directly.
     If not the query is proxied to the default upstream dns server.
     """
+
     def resolve(self, request, handler):
         reply = request.reply()
 
